@@ -1,3 +1,4 @@
+#!/bin/bash
 # This file is maintained by velocitas CLI, do not modify manually. Change settings in .velocitas.json
 # Copyright (c) 2022 Robert Bosch GmbH and Microsoft Corporation
 #
@@ -13,23 +14,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-name: pre-commit
-description: run pre-commit
-inputs:
-  extra_args:
-    description: Options to pass to pre-commit run
-    required: false
-    default: "--all-files"
-runs:
-  using: composite
-  steps:
-    - run: python -m pip install pre-commit
-      shell: bash
-    - run: python -m pip freeze --local
-      shell: bash
-    - uses: actions/cache@v3
-      with:
-        path: ~/.cache/pre-commit
-        key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
-    - run: pre-commit run --show-diff-on-failure --color=always ${{ inputs.extra_args }}
-      shell: bash
+echo "#######################################################"
+echo "### Checking container creation                     ###"
+echo "#######################################################"
+useradd vscode --password vscode -m
+usermod -aG sudo vscode
