@@ -61,10 +61,6 @@
 			"command": [
 				"velocitas exec runtime-local run-vehicle-app --dapr-app-id vehicleapp --dapr-app-port 50008 python3 ${workspaceFolder}/app/src/main.py"
 			],
-			"presentation": {
-				"close": true,
-				"reveal": "never"
-			},
 			"problemMatcher": []
 		},
 		{
