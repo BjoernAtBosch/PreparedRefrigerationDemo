@@ -7614,12 +7614,24 @@
                         "type": "sensor",
                         "uuid": "77f28ed03c125ac9a19d22e9436b0ec4"
                     },
+                    "InsideTemperature": {
+                        "datatype": "float",
+                        "description": "Current temperature inside the trailer",
+                        "type": "sensor",
+                        "unit": "celsius"
+                    },
                     "Refrigeration": {
                         "children": {
                             "IsEnabled": {
                                 "datatype": "boolean",
                                 "description": "Is Refrigeration active?",
                                 "type": "actuator"
+                            },
+                            "TargetTemperature": {
+                                "datatype": "float",
+                                "description": "Target temperature inside the trailer",
+                                "type": "actuator",
+                                "unit": "celsius"
                             }
                         },
                         "description": "Control and monitor trailer refrigeration system",

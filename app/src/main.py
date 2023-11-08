@@ -18,7 +18,7 @@ import asyncio
 import logging
 import signal
 
-from vapp import AppName  # type: ignore # noqa: E402
+from vapp import RefrigerationDemo  # type: ignore # noqa: E402
 from velocitas_sdk.util.log import (  # type: ignore
     get_opentelemetry_log_factory,
     get_opentelemetry_log_format,
@@ -32,8 +32,8 @@ logger = logging.getLogger(__name__)
 
 async def main():
     """Main function"""
-    logger.info("Starting AppName app...")
-    app = AppName()
+    logger.info("Starting RefrigerationDemo app...")
+    app = RefrigerationDemo()
     await app.run()
 
 

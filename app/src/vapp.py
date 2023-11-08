@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Contributors to the Eclipse Foundation
+# Copyright (c) 2023 Robert Bosch GmbH and Microsoft Corporation
 #
 # This program and the accompanying materials are made available under the
 # terms of the Apache License, Version 2.0 which is available at
@@ -12,14 +12,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-"""A skeleton Velocitas vehicle app."""
+"""A demo for a trailer with refrigeration capabilities."""
 
+import json
 import logging
 
+from vehicle import vehicle  # type: ignore
 from velocitas_sdk.util.log import (  # type: ignore
     get_opentelemetry_log_factory,
     get_opentelemetry_log_format,
 )
+from velocitas_sdk.vdb.reply import DataPointReply
 from velocitas_sdk.vehicle_app import VehicleApp
 
 logging.setLogRecordFactory(get_opentelemetry_log_factory())
@@ -28,13 +31,35 @@ logging.getLogger().setLevel("DEBUG")
 logger = logging.getLogger(__name__)
 
 
-class AppName(VehicleApp):
+class RefrigerationDemo(VehicleApp):
     """
-    AppName Vehicle App.
+    The RefrigerationDemo supervises the temperature inside the trailer
+    and triggers an alarm via a specific MQTT topic if it gets to warm
     """
 
     def __init__(self):
         super().__init__()
+        self.Vehicle = vehicle
 
     async def on_start(self):
-        pass
+        """Run when the vehicle app starts"""
+        await self.Vehicle.Trailer.InsideTemperature.subscribe(
+            self.on_inside_temperature_changed
+        )
+
+    async def on_inside_temperature_changed(self, data: DataPointReply):
+        target_temperature = (await self.Vehicle.Trailer.Refrigeration.TargetTemperature.get()).value
+        current_temperature = data.get(self.Vehicle.Trailer.InsideTemperature).value
+        hysteresis = 1 # degree Celsius
+        if current_temperature > target_temperature + 2*hysteresis:
+            over_temperature_topic = "trailer_refrigeration/over_temperature_warning"
+            await self.publish_event(
+                over_temperature_topic,
+                json.dumps(
+                    {
+                        "warning_text": "Current temperature inside trailer exceeds target value!",
+                        "current_temperature": current_temperature,
+                        "target_temperature": target_temperature
+                    }
+                ),
+            )
