@@ -7618,20 +7618,23 @@
                         "datatype": "float",
                         "description": "Current temperature inside the trailer",
                         "type": "sensor",
-                        "unit": "celsius"
+                        "unit": "celsius",
+                        "default": -18.3
                     },
                     "Refrigeration": {
                         "children": {
                             "IsEnabled": {
                                 "datatype": "boolean",
                                 "description": "Is Refrigeration active?",
-                                "type": "actuator"
+                                "type": "actuator",
+                                "default": true
                             },
                             "TargetTemperature": {
                                 "datatype": "float",
                                 "description": "Target temperature inside the trailer",
                                 "type": "actuator",
-                                "unit": "celsius"
+                                "unit": "celsius",
+                                "default": -18.0
                             }
                         },
                         "description": "Control and monitor trailer refrigeration system",
